@@ -20,9 +20,12 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $post = Post::get();
+        $limit = $request->limit == null ? 10 : $request->limit;
+
+        //按照一頁限制筆數分頁
+        $post = Post::orderBy('id','desc')->paginate($limit);
 
         if($post){
             return $this->makeJson(1, $post, '以上為全部文章');
