@@ -15,5 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
         
+        // 生成10筆post假資料
+        \App\Models\Post::factory(10)->create();
     }
 }
