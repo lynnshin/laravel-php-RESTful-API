@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
-// use Response;
+// use Throwable;
+use Symfony\Component\HttpFoundation\Response;
+use App\Exceptions\Handler;
 
 class PostController extends Controller
 {
 
-    private function makeJson($status, $data, $msg)
+    private function makeJson($status, $data, $statusCode)
     {
         //轉 JSON 時確保中文不會變成 Unicode
-        return response()->json(['status' => $status, 'data' => $data, 'message' => $msg])->setEncodingOptions(JSON_UNESCAPED_UNICODE);
+        return response()->json(['status' => $status, 'data' => $data], $statusCode)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
     /**
      * Display a listing of the resource.
@@ -23,16 +25,20 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $limit = $request->limit == null ? 10 : $request->limit;
+        $catagory = $request->catagory;
+        $status = $request->status == null ? 'published' : $request->status;
 
+        $query = Post::query();
+        
+        //如果有選擇文章類別
+        if($catagory){
+            $query->where('catagory','=',$catagory);
+        }
         //按照一頁限制筆數分頁
-        $post = Post::orderBy('id','desc')->paginate($limit);
+        $post = $query->orderBy('id','desc')->where('status','=',$status)->paginate($limit);
 
-        if($post){
-            return $this->makeJson(1, $post, '以上為全部文章');
-        }
-        else{
-            return $this->makeJson(0, null, '找不到任何文章');
-        }
+        $data = ['post'=> $post];
+        return $this->makeJson('success', $data, Response::HTTP_OK);
     }
 
     /**
@@ -43,17 +49,11 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $input = ['title'=> $request->title, 'content'=> $request->content];
-
         $post = Post::create($request->all());
 
-        if($post){
-            //$data = ['post'=> $post];
-            return $this->makeJson(1, $post, '新增成功');
-        }
-        else{
-            return $this->makeJson(0, null, '新增失敗');
-        }
+        $data = ['post'=> $post];
+        return $this->makeJson('success', $data, Response::HTTP_OK);
+        
     }
 
     /**
@@ -64,14 +64,11 @@ class PostController extends Controller
      */
     public function show($id)
     {
-        $post = Post::find($id);
+        $post = Post::findOrFail($id);
 
-        if($post){
-            return $this->makeJson(1, $post, '文章'.$id);
-        }
-        else{
-            return $this->makeJson(0, null, '查無此文章');
-        }
+        $data = ['post'=> $post];
+        return $this->makeJson('success', $data, Response::HTTP_OK);
+
     }
 
     /**
@@ -83,17 +80,12 @@ class PostController extends Controller
      */
     public function update(Request $request, $id)
     {
-        try{
-            $post = Post::findOrFail($id);
-            // $post->title = $request->title;
-            // $post->content = $request->content;
-            $post->update($request->all());
-            $post->save();
-        }
-        catch(Exception $e){
-            return $this->makeJson(0, null, '更新失敗');
-        }
-        return $this->makeJson(1, $post, '更新成功');
+        $post = Post::findOrFail($id);
+        $post->update($request->all());
+        $post->save();
+
+        $data = ['post'=> $post];
+        return $this->makeJson('success', $data, Response::HTTP_OK);
     }
 
     /**
@@ -104,13 +96,9 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        try{
-            $post = Post::findOrFail($id);
-            $post->delete();
-        }
-        catch(Exception $e){
-            return $this->makeJson(0, null, '刪除失敗');
-        }
-        return $this->makeJson(1, null, '刪除成功');
+        $post = Post::findOrFail($id);
+        $post->delete();
+
+        return $this->makeJson('success', null, Response::HTTP_OK);
     }
 }
