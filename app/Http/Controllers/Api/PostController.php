@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Post;
-// use Throwable;
 use Symfony\Component\HttpFoundation\Response;
 use App\Exceptions\Handler;
+use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
@@ -17,6 +17,26 @@ class PostController extends Controller
         //轉 JSON 時確保中文不會變成 Unicode
         return response()->json(['status' => $status, 'data' => $data], $statusCode)->setEncodingOptions(JSON_UNESCAPED_UNICODE);
     }
+
+    private function checkRequest($request){
+        // 草稿允許標題內空白
+        if ($request->status == 'draft'){            
+            $request['title'] = $request->title == null ? '' : $request->title;
+            $request['content'] = $request->content == null ? '' : $request->content;
+        }
+        else{
+            // 表單驗證
+            $validator = Validator::make($request->all(), [
+                'title' => 'required|max:50',
+                'content' => 'required',
+            ]);
+            
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), Response::HTTP_FORBIDDEN);
+            }           
+        }
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -49,11 +69,16 @@ class PostController extends Controller
      */
     public function store(Request $request)
     {
-        $post = Post::create($request->all());
+        $check = $this->checkRequest($request);
+        if ($check){
+            return $check;
+        }
+        else{
+            $post = Post::create($request->all());
 
-        $data = ['post'=> $post];
-        return $this->makeJson('success', $data, Response::HTTP_OK);
-        
+            $data = ['post'=> $post];
+            return $this->makeJson('success', $data, Response::HTTP_OK);
+        }        
     }
 
     /**
@@ -81,11 +106,18 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $post = Post::findOrFail($id);
-        $post->update($request->all());
-        $post->save();
 
-        $data = ['post'=> $post];
-        return $this->makeJson('success', $data, Response::HTTP_OK);
+        $check = $this->checkRequest($request);
+        if ($check){
+            return $check;
+        }
+        else{
+            $post->update($request->all());
+            $post->save();
+    
+            $data = ['post'=> $post];
+            return $this->makeJson('success', $data, Response::HTTP_OK);
+        }        
     }
 
     /**
