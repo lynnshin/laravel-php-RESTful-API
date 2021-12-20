@@ -15,9 +15,10 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
-            $table->string('title', 50);
-            $table->text('content')->nullable();
-            $table->string('status', 10)->default('draft');
+            $table->string('title', 50)->comment('文章標題');
+            $table->text('content')->comment('文章內容');
+            $table->integer('catagoryId')->default(0)->comment('文章分類');
+            $table->string('status', 10)->default('draft')->comment('文章狀態，草稿與正式發布');
             $table->timestamps();
         });
     }
