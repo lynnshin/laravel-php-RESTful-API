@@ -50,12 +50,12 @@ class Handler extends ExceptionHandler
 
     public function render($request, Throwable $exception)
     {
+        // 使用 Model::findOrFail 找不到資源時拋出 ModelNotFoundException
         if ($exception instanceof ModelNotFoundException) {
-            // 回傳資源時 使用 Model::findOrFail 找不到資源時統一回傳
             return $this->makeJson('failed', null, Response::HTTP_NOT_FOUND);
         }
+        // Query 指令出現錯誤時拋出 QueryException
         if ($exception instanceof QueryException) {
-            // 回傳資源時 使用 Model::findOrFail 找不到資源時統一回傳
             return $this->makeJson('failed', null, Response::HTTP_EXPECTATION_FAILED);
         }
 
