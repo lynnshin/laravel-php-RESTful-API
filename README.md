@@ -25,7 +25,7 @@
     * Catagory
         | 欄位         | 說明     | 格式        | 備註      |
         | ----------- | -------- | ----------  | --------  |
-        | catagoryId  | 分類ID   | INT(10)     |           |
-        | catagoryName| 類別名稱 | VARCHAR(50) |           |
+        | id  | 分類ID   | INT(10)     |           |
+        | name| 類別名稱 | VARCHAR(50) |           |
         | created_at  | 創建時間 | TIMESTAMP   | 預設NULL  |
         | updated_at  | 更新時間 | TIMESTAMP   | 預設NULL  |
