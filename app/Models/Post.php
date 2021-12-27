@@ -15,4 +15,9 @@ class Post extends Model
         'catagoryId',
         'status',
     ];
+
+    public function catagory()
+    {
+        return $this->belongsTo('App\Catagory');
+    }
 }
