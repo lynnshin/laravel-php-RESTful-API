@@ -19,6 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::apiResource('posts', 'App\Http\Controllers\Api\PostController');
+Route::apiResource('catagories', 'App\Http\Controllers\Api\CatagoryController');
 // Route::middleware('auth:api')->group(function () {
 //     Route::apiResource('posts', 'App\Http\Controllers\Api\PostController');
 // });
