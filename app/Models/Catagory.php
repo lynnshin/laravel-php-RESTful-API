@@ -9,10 +9,10 @@ class Catagory extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name',
+        'name'
     ];
 
     public function posts(){
-        return $this->hasMany('App\Post', 'catagoryId', 'id');
+        return $this->hasMany('App\Models\Post', 'catagory_id', 'id');
     }
 }

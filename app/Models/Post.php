@@ -12,12 +12,17 @@ class Post extends Model
     protected $fillable = [
         'title',
         'content',
-        'catagoryId',
-        'status',
+        'catagory_id',
+        'status'
     ];
 
     public function catagory()
     {
-        return $this->belongsTo('App\Catagory');
+        /*  如果Post對Catagory的foreign key叫catagoryId，則需寫成
+                return $this->belongsTo('App\Models\Catagory', catagoryId);
+            因為Eloquent判斷的預設外鍵名稱參考於關聯模型的方法，並在方法名稱後面加上_id，如catagory_id
+        */
+
+        return $this->belongsTo('App\Models\Catagory');
     }
 }

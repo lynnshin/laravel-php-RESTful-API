@@ -8,6 +8,7 @@ use App\Models\Post;
 use Symfony\Component\HttpFoundation\Response;
 use App\Exceptions\Handler;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\PostResource;
 
 class PostController extends Controller
 {
@@ -90,9 +91,8 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::findOrFail($id);
-
-        $data = ['post'=> $post];
-        return $this->makeJson('success', $data, Response::HTTP_OK);
+        
+        return $this->makeJson('success', new PostResource($post), Response::HTTP_OK);
 
     }
 

@@ -17,7 +17,7 @@ class CreatePostsTable extends Migration
             $table->id();
             $table->string('title', 50)->comment('文章標題');
             $table->text('content')->comment('文章內容');
-            $table->integer('catagoryId')->default(0)->comment('文章分類');
+            $table->integer('catagory_id')->default(1)->comment('文章分類');
             $table->string('status', 10)->default('draft')->comment('文章狀態，草稿與正式發布');
             $table->timestamps();
         });
