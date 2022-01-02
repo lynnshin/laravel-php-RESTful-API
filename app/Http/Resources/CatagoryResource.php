@@ -22,6 +22,8 @@ class CatagoryResource extends JsonResource
         */
         
         $catagoryArray = parent::toArray($request);
+        unset($catagoryArray['catagory_id']);
+        unset($catagoryArray['user_id']);
         unset($catagoryArray['created_at']);
         unset($catagoryArray['updated_at']);
 

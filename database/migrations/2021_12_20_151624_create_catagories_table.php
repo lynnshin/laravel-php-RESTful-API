@@ -16,6 +16,7 @@ class CreateCatagoriesTable extends Migration
         Schema::create('catagories', function (Blueprint $table) {
             $table->id();
             $table->string('name',50)->unique()->comment('類別名稱');
+            $table->bigInteger('user_id')->unsigned()->comment('使用者id');
             $table->timestamps();
         });
     }

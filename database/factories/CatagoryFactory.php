@@ -15,6 +15,7 @@ class CatagoryFactory extends Factory
     {
         return [
             'name'=> $this->faker->word,
+            'user_id'=> $this->faker->numberBetween(1,1)
         ];
     }
 }
