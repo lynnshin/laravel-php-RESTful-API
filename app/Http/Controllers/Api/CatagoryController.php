@@ -68,6 +68,7 @@ class CatagoryController extends Controller
      */
     public function update(Request $request, Catagory $catagory)
     {
+        $this->authorize('update', $catagory);
         $catagory->update($request->all());
         return $this->makeJson('success', $catagory, Response::HTTP_OK);
     }
@@ -80,6 +81,7 @@ class CatagoryController extends Controller
      */
     public function destroy(Catagory $catagory)
     {
+        $this->authorize('delete', $catagory);
         $catagory->delete();
         return $this->makeJson('success', null, Response::HTTP_OK);
     }

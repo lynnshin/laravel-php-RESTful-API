@@ -107,6 +107,8 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($id);
 
+        $this->authorize('update', $post);
+
         $check = $this->checkRequest($request);
         if ($check){
             return $check;
@@ -129,6 +131,9 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
+        
+        $this->authorize('delete', $post);
+
         $post->delete();
 
         return $this->makeJson('success', null, Response::HTTP_OK);
