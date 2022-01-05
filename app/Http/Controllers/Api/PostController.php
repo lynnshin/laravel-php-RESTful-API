@@ -46,14 +46,14 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $limit = $request->limit == null ? 10 : $request->limit;
-        $catagory = $request->catagory;
+        $catagory = $request->catagory_id;
         $status = $request->status == null ? 'published' : $request->status;
 
         $query = Post::query();
         
         //如果有選擇文章類別
         if($catagory){
-            $query->where('catagory','=',$catagory);
+            $query->where('catagory_id','=',$catagory);
         }
         //按照一頁限制筆數分頁
         $post = $query->orderBy('id','desc')->where('status','=',$status)->paginate($limit);
