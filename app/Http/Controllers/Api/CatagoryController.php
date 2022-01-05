@@ -21,9 +21,10 @@ class CatagoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $catagory = Catagory::get();
+        $catagory = Catagory::where('user_id',$request->user_id)->get();
+
         return $this->makeJson('success', $catagory, Response::HTTP_OK);
     }
 
