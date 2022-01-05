@@ -10,6 +10,7 @@
     * 新增、修改時進行表單驗證
     * 文章列表查詢可限制筆數分頁
   * 文章類別的 CRUD
+  * 會員功能使用 Laravel 所提供的方法完成
 * 資料表
     * Post
     
@@ -20,12 +21,15 @@
         | content    | 內容    | TEXT        |           |
         | catagoryId | 文章分類 | INT(10)     | 預設 0    |
         | status     | 文章狀態 | VARCHAR(10) | 預設draft |
+        | user_id    | 使用者id | BIGINT(20)  |           |
         | created_at | 創建時間 | TIMESTAMP   | 預設NULL  |
         | updated_at | 更新時間 | TIMESTAMP   | 預設NULL  |
     * Catagory
+ 
         | 欄位         | 說明     | 格式        | 備註      |
         | ----------- | -------- | ----------  | --------  |
         | id  | 分類ID   | INT(10)     |           |
         | name| 類別名稱 | VARCHAR(50) |           |
+        | user_id    | 使用者id | BIGINT(20)  |           |
         | created_at  | 創建時間 | TIMESTAMP   | 預設NULL  |
         | updated_at  | 更新時間 | TIMESTAMP   | 預設NULL  |
